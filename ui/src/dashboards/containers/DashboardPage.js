@@ -256,7 +256,7 @@ class DashboardPage extends Component {
       inPresentationMode,
       handleChooseAutoRefresh,
       handleClickPresentationButton,
-      params: {sourceID},
+      params: {sourceID, dashboardID},
     } = this.props
 
     const dashboard = this.getActiveDashboard()
@@ -304,6 +304,7 @@ class DashboardPage extends Component {
         {selectedCell
           ? <CellEditorOverlay
               source={source}
+              dashboardID={dashboardID}
               templates={templatesIncludingDashTime}
               cell={selectedCell}
               timeRange={timeRange}
@@ -311,6 +312,7 @@ class DashboardPage extends Component {
               queryStatus={cellQueryStatus}
               onSave={this.handleSaveEditedCell}
               onCancel={this.handleDismissOverlay}
+              onEditCellRanges={dashboardActions.editCellRanges}
               editQueryStatus={dashboardActions.editCellQueryStatus}
             />
           : null}
@@ -354,8 +356,8 @@ class DashboardPage extends Component {
               autoRefresh={autoRefresh}
               synchronizer={this.synchronizer}
               onAddCell={this.handleAddCell}
-              inPresentationMode={inPresentationMode}
               onEditCell={this.handleEditDashboardCell}
+              inPresentationMode={inPresentationMode}
               onPositionChange={this.handleUpdatePosition}
               onDeleteCell={this.handleDeleteDashboardCell}
               onRenameCell={this.handleRenameDashboardCell}
@@ -395,6 +397,7 @@ DashboardPage.propTypes = {
     addDashboardCellAsync: func.isRequired,
     editDashboardCell: func.isRequired,
     renameDashboardCell: func.isRequired,
+    editCellRanges: func.isRequired,
   }).isRequired,
   dashboards: arrayOf(
     shape({
