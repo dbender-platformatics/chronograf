@@ -311,7 +311,6 @@ class DashboardPage extends Component {
               queryStatus={cellQueryStatus}
               onSave={this.handleSaveEditedCell}
               onCancel={this.handleDismissOverlay}
-              onEditCellRanges={dashboardActions.editCellRanges}
               editQueryStatus={dashboardActions.editCellQueryStatus}
             />
           : null}
@@ -396,7 +395,6 @@ DashboardPage.propTypes = {
     addDashboardCellAsync: func.isRequired,
     editDashboardCell: func.isRequired,
     renameDashboardCell: func.isRequired,
-    editCellRanges: func.isRequired,
   }).isRequired,
   dashboards: arrayOf(
     shape({
