@@ -28,6 +28,7 @@ var (
 // Client is a device for retrieving time series data from an InfluxDB instance
 type Client struct {
 	URL                *url.URL
+	SharedSecret       *string // SharedSecret is used for the optional JWT authorization
 	InsecureSkipVerify bool
 
 	Logger chronograf.Logger
@@ -87,6 +88,15 @@ func (c *Client) query(u *url.URL, q chronograf.Query) (chronograf.Response, err
 	params.Set("rp", q.RP)
 	params.Set("epoch", "ms") // TODO(timraymond): set this based on analysis
 	req.URL.RawQuery = params.Encode()
+
+	if c.SharedSecret != nil && u.User != nil {
+		token, err := JWT(u.User.Username(), *c.SharedSecret)
+		if err != nil {
+			logs.Error("Error creating JWT", err)
+			return nil, fmt.Errorf("Unable to create token")
+		}
+		req.Header.Set("Authorization", "Bearer "+token)
+	}
 
 	hc := &http.Client{}
 	if c.InsecureSkipVerify {
